@@ -29,5 +29,5 @@ export interface ICalendarDate {
   tasks: ITask[];
   holidayTitle: string | null;
   isRelevant: boolean;
-  isToDay: boolean;
+  isToday: boolean;
 }

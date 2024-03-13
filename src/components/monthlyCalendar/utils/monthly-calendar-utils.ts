@@ -11,9 +11,7 @@ const isToday = (date: Moment): boolean => {
 
 const findTasks = (busyDates: IBusyDate[], date: Moment): ITask[] => {
   const busyDate = busyDates.find(
-    ((d: IBusyDate) => d.date === date.date()) &&
-      ((d: IBusyDate) => d.month === date.month()) &&
-      ((d: IBusyDate) => d.year === date.year()),
+    (d: IBusyDate) => d.date === date.date() && d.month === date.month() && d.year === date.year(),
   );
   return busyDate?.tasks || [];
 };
@@ -47,7 +45,7 @@ export const createMonthlyCalendar = (
         tasks: [],
         holidayTitle: null,
         isRelevant: false,
-        isToDay: false,
+        isToday: false,
       });
     }
 
@@ -59,7 +57,7 @@ export const createMonthlyCalendar = (
         tasks: tasks,
         holidayTitle: findHoliday(Holidays, currentDate),
         isRelevant: currentDate.isAfter(endOfPrevMonth) && currentDate.isBefore(endOfMonth),
-        isToDay: isToday(currentDate),
+        isToday: isToday(currentDate),
       });
     }
 
