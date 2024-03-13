@@ -2,12 +2,16 @@ import styled from 'styled-components';
 
 const StyledCalendar = styled.div`
   background: red;
-  height: 60vw;
+  &::after {
+    content: '';
+    display: block;
+    padding-top: 60%;
+  }
 `;
 
-type TMonthlyCalendarProps = {
-  text: string;
-};
+// type TMonthlyCalendarProps = {
+//   text: string;
+// };
 
 const MonthlyCalendar = () => {
   return <StyledCalendar>Calendar</StyledCalendar>;

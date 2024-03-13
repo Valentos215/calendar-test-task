@@ -2,7 +2,10 @@ import { useState } from 'react';
 import Header from 'components/header/Header';
 import styled from 'styled-components';
 import moment from 'moment';
-import MonthlyCalendar from 'components/monthlyCalendar/monthlyCalendar';
+import { createMonthlyCalendar } from 'components/monthlyCalendar/utils/monthly-calendar-utils';
+import { ETaskColor, Holidays } from 'constants/constants';
+import { IBusyDate } from 'types/types';
+import MonthlyCalendar from 'components/monthlyCalendar/MonthlyCalendar';
 
 const AppWrapper = styled.div`
   width: 100%;
@@ -13,6 +16,7 @@ const AppWrapper = styled.div`
 
 const Container = styled.div`
   width: 80vw;
+  max-width: 1200px;
   background: rgb(238, 239, 241);
   display: flex;
   flex-direction: column;
@@ -23,6 +27,28 @@ const Container = styled.div`
 
 function App() {
   const [currentDate, setCurrentDate] = useState(moment());
+  const busyDates: IBusyDate[] = [
+    {
+      date: 8,
+      month: 2,
+      year: 2024,
+      tasks: [
+        {
+          title: 'To do',
+          color: ETaskColor.GREEN,
+        },
+      ],
+    },
+  ];
+
+  const calendarState = createMonthlyCalendar(
+    currentDate.month(),
+    currentDate.year(),
+    busyDates,
+    Holidays,
+  );
+
+  console.log(calendarState);
 
   return (
     <AppWrapper>

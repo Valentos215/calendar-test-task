@@ -6,12 +6,12 @@ export interface ITask {
 }
 
 export interface IShortDate {
-  day: number;
+  date: number;
   month: number;
 }
 
 export interface IFullDate {
-  day: number;
+  date: number;
   month: number;
   year: number;
 }
@@ -20,14 +20,14 @@ export interface IHoliday extends IShortDate {
   title: string;
 }
 
-export interface IBusyDay extends IFullDate {
+export interface IBusyDate extends IFullDate {
   tasks: ITask[];
 }
 
-export interface ICalendarDay {
-  day: number | null;
+export interface ICalendarDate {
+  date: number | null;
   tasks: ITask[];
   holidayTitle: string | null;
   isRelevant: boolean;
-  isToday: boolean;
+  isToDay: boolean;
 }

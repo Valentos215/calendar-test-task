@@ -3,7 +3,7 @@
 
 // const getFullDate = (date: Moment): IFullDate => {
 //   return {
-//     day: date.date(),
+//     Date: date.date(),
 //     month: date.month(),
 //     year: date.year(),
 //   };
@@ -11,7 +11,7 @@
 
 // const getShortDate = (date: Moment): IShortDate => {
 //   return {
-//     day: date.date(),
+//     Date: date.date(),
 //     month: date.month(),
 //   };
 // };
