@@ -1,0 +1,17 @@
+// import moment, { Moment } from 'moment';
+// import { IFullDate, IShortDate } from 'types/types';
+
+// const getFullDate = (date: Moment): IFullDate => {
+//   return {
+//     day: date.date(),
+//     month: date.month(),
+//     year: date.year(),
+//   };
+// };
+
+// const getShortDate = (date: Moment): IShortDate => {
+//   return {
+//     day: date.date(),
+//     month: date.month(),
+//   };
+// };
