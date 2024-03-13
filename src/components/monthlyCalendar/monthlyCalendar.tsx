@@ -1,22 +1,16 @@
 import styled from 'styled-components';
 
-const StyledTitle = styled.div`
-  font-size: 1.5rem;
-  font-weight: 700;
-  flex: 1 0 auto;
-  text-align: center;
-  margin-left: 10vw;
-  @media (max-width: 769px) {
-    margin-left: 0;
-  }
+const StyledCalendar = styled.div`
+  background: red;
+  height: 60vw;
 `;
 
-type THeaderTitleProps = {
+type TMonthlyCalendarProps = {
   text: string;
 };
 
-const monthlyCalendar = ({ text }: THeaderTitleProps) => {
-  return <StyledTitle>{text}</StyledTitle>;
+const MonthlyCalendar = () => {
+  return <StyledCalendar>Calendar</StyledCalendar>;
 };
 
-export default monthlyCalendar;
+export default MonthlyCalendar;

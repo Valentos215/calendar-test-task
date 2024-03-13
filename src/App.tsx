@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Header from 'components/header/Header';
 import styled from 'styled-components';
 import moment from 'moment';
+import MonthlyCalendar from 'components/monthlyCalendar/monthlyCalendar';
 
 const AppWrapper = styled.div`
   width: 100%;
@@ -11,7 +12,7 @@ const AppWrapper = styled.div`
 `;
 
 const Container = styled.div`
-  width: 85%;
+  width: 80vw;
   background: rgb(238, 239, 241);
   display: flex;
   flex-direction: column;
@@ -27,7 +28,7 @@ function App() {
     <AppWrapper>
       <Container>
         <Header currentDate={currentDate} setCurrentDate={setCurrentDate} />
-        App
+        <MonthlyCalendar />
       </Container>
     </AppWrapper>
   );
