@@ -3,8 +3,7 @@ import Header from 'components/header/Header';
 import styled from 'styled-components';
 import moment from 'moment';
 import { createMonthlyCalendar } from 'components/monthlyCalendar/utils/monthly-calendar-utils';
-import { ETaskColor, Holidays } from 'constants/constants';
-import { IBusyDate } from 'types/types';
+import { Holidays, exampleBusyDates } from 'constants/constants';
 import MonthlyCalendar from 'components/monthlyCalendar/MonthlyCalendar';
 
 const AppWrapper = styled.div`
@@ -26,34 +25,16 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [currentDate, setCurrentDate] = useState(moment());
-  const busyDates: IBusyDate[] = [
-    {
-      date: 8,
-      month: 2,
-      year: 2024,
-      tasks: [
-        {
-          title: 'To do',
-          color: ETaskColor.GREEN,
-        },
-      ],
-    },
-  ];
+  const [selectedDate, setSelectedDate] = useState(moment());
 
-  const calendarState = createMonthlyCalendar(
-    currentDate.month(),
-    currentDate.year(),
-    busyDates,
-    Holidays,
-  );
+  const monthlyCalendar = createMonthlyCalendar(selectedDate, exampleBusyDates, Holidays);
 
-  console.log(calendarState);
+  console.log(monthlyCalendar);
 
   return (
     <AppWrapper>
       <Container>
-        <Header currentDate={currentDate} setCurrentDate={setCurrentDate} />
+        <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         <MonthlyCalendar />
       </Container>
     </AppWrapper>

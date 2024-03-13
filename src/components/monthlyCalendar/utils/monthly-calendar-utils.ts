@@ -24,12 +24,11 @@ const findHoliday = (Holidays: IHoliday[], date: Moment): string | null => {
 };
 
 export const createMonthlyCalendar = (
-  month: number,
-  year: number,
+  selectedDate: Moment,
   busyDates: IBusyDate[],
   Holidays: IHoliday[],
 ): ICalendarDate[] => {
-  const startOfMonth = moment(`1.${month + 1}.${year}`, 'D.M.YYYY');
+  const startOfMonth = selectedDate.startOf('month');
   const endOfPrevMonth = startOfMonth.clone().subtract(1, 'day');
   const startOfFirstWeek = startOfMonth.clone().startOf('week');
   const endOfMonth = startOfMonth.clone().endOf('month');

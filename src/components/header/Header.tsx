@@ -14,19 +14,19 @@ const StyledHeader = styled.header`
 `;
 
 type THeaderProps = {
-  currentDate: Moment;
-  setCurrentDate: (value: Moment) => void;
+  selectedDate: Moment;
+  setSelectedDate: (value: Moment) => void;
 };
 
-const Header = ({ currentDate, setCurrentDate }: THeaderProps) => {
-  const titleText = `${currentDate.format('MMMM')} ${currentDate.year()}`;
+const Header = ({ selectedDate, setSelectedDate }: THeaderProps) => {
+  const titleText = `${selectedDate.format('MMMM')} ${selectedDate.year()}`;
 
   const goToPrevMonth = () => {
-    setCurrentDate(currentDate.clone().subtract(1, 'month').startOf('month'));
+    setSelectedDate(selectedDate.clone().subtract(1, 'month').startOf('month'));
   };
 
   const goToNextMonth = () => {
-    setCurrentDate(currentDate.clone().add(1, 'month').startOf('month'));
+    setSelectedDate(selectedDate.clone().add(1, 'month').startOf('month'));
   };
 
   return (

@@ -1,4 +1,4 @@
-import { IHoliday } from 'types/types';
+import { IBusyDate, IHoliday } from 'types/types';
 
 export enum ETaskColor {
   GREEN = 'rgb(96, 190, 80)',
@@ -65,5 +65,21 @@ export const Holidays: IHoliday[] = [
     date: 1,
     month: 4,
     title: 'Labour Day',
+  },
+];
+
+export const weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const exampleBusyDates: IBusyDate[] = [
+  {
+    date: 9,
+    month: 2,
+    year: 2024,
+    tasks: [
+      {
+        title: 'To do',
+        color: ETaskColor.GREEN,
+      },
+    ],
   },
 ];
