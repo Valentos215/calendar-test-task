@@ -1,10 +1,9 @@
-import moment, { Moment, isMoment } from 'moment';
+import { Moment } from 'moment';
 import styled from 'styled-components';
-import { createMonthlyCalendar } from './utils/calendar-utils';
-import { Holidays, exampleBusyDates, weekDays } from 'constants/constants';
+import { createMonthlyCalendar } from 'components/calendar/utils/calendar-utils';
+import { holidays, weekDays } from 'constants/constants';
 import CalendarCell from './CalendarCell';
-import { ICalendarDate } from 'types/types';
-import { useEffect, useState } from 'react';
+import { IBusyDate, ICalendarDate } from 'types/types';
 
 const StyledCalendar = styled.div`
   display: grid;
@@ -22,10 +21,11 @@ const WeekDayCell = styled.div`
 type TMonthlyCalendarProps = {
   selectedDate: Moment;
   setSelectedDate: (value: Moment) => void;
+  busyDates: IBusyDate[];
 };
 
-const MonthlyCalendar = ({ selectedDate, setSelectedDate }: TMonthlyCalendarProps) => {
-  const calendarState = createMonthlyCalendar(selectedDate, exampleBusyDates, Holidays);
+const MonthlyCalendar = ({ selectedDate, setSelectedDate, busyDates }: TMonthlyCalendarProps) => {
+  const calendarState = createMonthlyCalendar(selectedDate, busyDates, holidays);
 
   const onCellClick = (date: ICalendarDate) => {
     if (date.isRelevant) {

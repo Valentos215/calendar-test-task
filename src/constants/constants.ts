@@ -9,7 +9,7 @@ export enum ETaskColor {
   PURPLE = 'rgb(195, 118, 224)',
 }
 
-export const Holidays: IHoliday[] = [
+export const holidays: IHoliday[] = [
   {
     date: 8,
     month: 2,
