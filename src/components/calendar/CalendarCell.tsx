@@ -6,6 +6,8 @@ import TaskLabel from './TaskLabel';
 
 interface IStyledCellProps {
   isRelevant: boolean;
+  isToday: boolean;
+  isSelected: boolean;
 }
 
 const StyledDateCell = styled.div<IStyledCellProps>`
@@ -24,6 +26,17 @@ const StyledDateCell = styled.div<IStyledCellProps>`
       : css`
           background: #d3d3d3;
         `};
+  ${(props) =>
+    props.isToday &&
+    css`
+      border: 1px solid #555;
+    `};
+  ${(props) =>
+    props.isSelected &&
+    props.isRelevant &&
+    css`
+      box-shadow: 0 0 1rem #999;
+    `}
 `;
 
 const Date = styled.div`
@@ -40,14 +53,17 @@ const Cards = styled.div`
 `;
 
 type TCalendarCellProps = {
-  selectedDate: Moment;
-  setSelectedDate: (value: Moment) => void;
   date: ICalendarDate;
+  onCellClick: (date: ICalendarDate) => void;
+  selectedDate: Moment;
 };
 
-const CalendarCell = ({ selectedDate, setSelectedDate, date }: TCalendarCellProps) => {
+const CalendarCell = ({ date, onCellClick, selectedDate }: TCalendarCellProps) => {
+  const isSelected = !!date.date && date.date === selectedDate.date();
+  const props = { ...date, isSelected };
+
   return (
-    <StyledDateCell {...date}>
+    <StyledDateCell onClick={() => onCellClick(date)} {...props}>
       <Date>{date.date}</Date>
       {date.tasks.length === 1 && <Cards>{date.tasks.length} card</Cards>}
       {date.tasks.length > 1 && <Cards>{date.tasks.length} cards</Cards>}

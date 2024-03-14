@@ -28,7 +28,7 @@ export const createMonthlyCalendar = (
   busyDates: IBusyDate[],
   Holidays: IHoliday[],
 ): ICalendarDate[] => {
-  const startOfMonth = selectedDate.startOf('month');
+  const startOfMonth = selectedDate.clone().startOf('month');
   const endOfPrevMonth = startOfMonth.clone().subtract(1, 'day');
   const startOfFirstWeek = startOfMonth.clone().startOf('week');
   const endOfMonth = startOfMonth.clone().endOf('month');

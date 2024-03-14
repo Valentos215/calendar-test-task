@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Header from 'components/header/Header';
 import styled from 'styled-components';
 import moment from 'moment';
-import MonthlyCalendar from 'components/calendar/MonthlyCalendar';
+import Calendar from 'components/calendar/Calendar';
 
 const AppWrapper = styled.div`
   width: 100%;
@@ -23,13 +23,13 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [selectedDate, setSelectedDate] = useState(moment());
+  const [selectedDate, setSelectedDate] = useState(moment);
 
   return (
     <AppWrapper>
       <Container>
         <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        <MonthlyCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+        <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
       </Container>
     </AppWrapper>
   );

@@ -1,9 +1,10 @@
-import { Moment } from 'moment';
+import moment, { Moment, isMoment } from 'moment';
 import styled from 'styled-components';
 import { createMonthlyCalendar } from './utils/calendar-utils';
 import { Holidays, exampleBusyDates, weekDays } from 'constants/constants';
 import CalendarCell from './CalendarCell';
 import { ICalendarDate } from 'types/types';
+import { useEffect, useState } from 'react';
 
 const StyledCalendar = styled.div`
   display: grid;
@@ -24,20 +25,25 @@ type TMonthlyCalendarProps = {
 };
 
 const MonthlyCalendar = ({ selectedDate, setSelectedDate }: TMonthlyCalendarProps) => {
-  const monthlyCalendar = createMonthlyCalendar(selectedDate, exampleBusyDates, Holidays);
-  const onCellClick = () => {};
+  const calendarState = createMonthlyCalendar(selectedDate, exampleBusyDates, Holidays);
+
+  const onCellClick = (date: ICalendarDate) => {
+    if (date.isRelevant) {
+      setSelectedDate(selectedDate.clone().set('date', date.date || 1));
+    }
+  };
 
   return (
     <StyledCalendar>
       {weekDays.map((wd) => (
         <WeekDayCell>{wd}</WeekDayCell>
       ))}
-      {monthlyCalendar.map((d: ICalendarDate) => (
+      {calendarState.map((d: ICalendarDate) => (
         <CalendarCell
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
           date={d}
-          key={monthlyCalendar.indexOf(d)}
+          selectedDate={selectedDate}
+          onCellClick={onCellClick}
+          key={calendarState.indexOf(d)}
         />
       ))}
     </StyledCalendar>
