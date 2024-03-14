@@ -7,7 +7,6 @@ export enum ETaskColor {
   ORANGE = 'rgb(255, 171, 73)',
   AZURE = 'rgb(0, 195, 225)',
   PURPLE = 'rgb(195, 118, 224)',
-  GRAY = 'rgb(148, 148, 148)',
 }
 
 export const Holidays: IHoliday[] = [
@@ -72,12 +71,12 @@ export const weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sa
 
 export const exampleBusyDates: IBusyDate[] = [
   {
-    date: 9,
+    date: 8,
     month: 2,
     year: 2024,
     tasks: [
       {
-        title: 'To do',
+        title: 'Some things to do',
         color: ETaskColor.GREEN,
       },
     ],

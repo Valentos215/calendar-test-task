@@ -2,9 +2,7 @@ import { useState } from 'react';
 import Header from 'components/header/Header';
 import styled from 'styled-components';
 import moment from 'moment';
-import { createMonthlyCalendar } from 'components/monthlyCalendar/utils/monthly-calendar-utils';
-import { Holidays, exampleBusyDates } from 'constants/constants';
-import MonthlyCalendar from 'components/monthlyCalendar/MonthlyCalendar';
+import MonthlyCalendar from 'components/calendar/MonthlyCalendar';
 
 const AppWrapper = styled.div`
   width: 100%;
@@ -19,7 +17,7 @@ const Container = styled.div`
   background: rgb(238, 239, 241);
   display: flex;
   flex-direction: column;
-  @media (max-width: 769px) {
+  @media (max-width: 1000px) {
     width: 100%;
   }
 `;
@@ -27,15 +25,11 @@ const Container = styled.div`
 function App() {
   const [selectedDate, setSelectedDate] = useState(moment());
 
-  const monthlyCalendar = createMonthlyCalendar(selectedDate, exampleBusyDates, Holidays);
-
-  console.log(monthlyCalendar);
-
   return (
     <AppWrapper>
       <Container>
         <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        <MonthlyCalendar />
+        <MonthlyCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
       </Container>
     </AppWrapper>
   );

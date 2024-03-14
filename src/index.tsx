@@ -39,7 +39,7 @@ body {
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  @media (max-width: 450px) {
+  @media (max-width: 769px) {
    font-size: 14px;
   }
 }
