@@ -58,10 +58,12 @@ const TaskCard = ({ task, selectedDate, setBusyDates, setIsSomeChangingNow }: TT
   };
 
   const onConfirmClick = () => {
-    if (!newTask?.title.length || (newTask?.title.length && newTask?.title.length <= 5)) {
+    let err = '';
+    if (!newTask?.title.length || newTask?.title.length <= 5) {
       setError(EFormError.SHORT);
+      err = 'err';
     }
-    if (!error.length) {
+    if (!err) {
       editTask(task, newTask, selectedDate, setBusyDates);
       setIsChangingNow(false);
       setIsSomeChangingNow(false);

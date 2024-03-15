@@ -69,19 +69,19 @@ export const holidays: IHoliday[] = [
 
 export const weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export const exampleBusyDates: IBusyDate[] = [
-  {
-    date: 8,
-    month: 2,
-    year: 2024,
-    tasks: [
-      {
-        title: 'Some things to do',
-        color: ETaskColor.GREEN,
-      },
-    ],
-  },
-];
+// export const exampleBusyDates: IBusyDate[] = [
+//   {
+//     date: 8,
+//     month: 2,
+//     year: 2024,
+//     tasks: [
+//       {
+//         title: 'Some things to do',
+//         color: ETaskColor.GREEN,
+//       },
+//     ],
+//   },
+// ];
 
 export enum EFormError {
   SHORT = 'The task must be longer than 5 characters',

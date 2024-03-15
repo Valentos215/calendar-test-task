@@ -10,10 +10,14 @@ const isSameDates = (date1: Moment, date2: Moment): boolean => {
 };
 
 export const findTasks = (busyDates: IBusyDate[], date: Moment): ITask[] => {
-  const busyDate = busyDates.find(
-    (d: IBusyDate) => d.date === date.date() && d.month === date.month() && d.year === date.year(),
-  );
-  return busyDate?.tasks || [];
+  if (busyDates.length) {
+    const foundBusyDate = busyDates.find(
+      (d: IBusyDate) =>
+        d.date === date.date() && d.month === date.month() && d.year === date.year(),
+    );
+    if (!!foundBusyDate) return foundBusyDate.tasks;
+  }
+  return [];
 };
 
 export const findHoliday = (Holidays: IHoliday[], date: Moment): string | null => {

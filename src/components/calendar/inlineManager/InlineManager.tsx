@@ -41,6 +41,7 @@ const InlineManager = ({
   const [isSomeChangingNow, setIsSomeChangingNow] = useState<boolean>(false);
   const [isCreateInProcess, setIsCreateInProcess] = useState<boolean>(false);
   const [error, setError] = useState('');
+  const title = selectedDate.format('dddd, D MMMM');
 
   useEffect(() => {
     if (isSomeChangingNow) {
@@ -48,27 +49,29 @@ const InlineManager = ({
     }
   }, [isSomeChangingNow]);
 
-  const title = selectedDate.format('dddd, D MMMM');
-
   const onCreateClick = () => {
     setIsCreateInProcess(true);
   };
 
   const onCancelClick = () => {
-    setIsCreateInProcess(false);
     setNewTask({ title: '', color: ETaskColor.AZURE });
+    setIsCreateInProcess(false);
   };
 
   const onConfirmClick = () => {
+    let err = '';
+    if (!newTask?.title.length || newTask?.title.length <= 5) {
+      setError(EFormError.SHORT);
+      err = 'err';
+    }
     if (findTask(newTask, selectedDate, busyDates)) {
       setError(EFormError.EXIST);
+      err = 'err';
     }
-    if (!newTask?.title.length || (newTask?.title.length && newTask?.title.length <= 5)) {
-      setError(EFormError.SHORT);
-    }
-    if (!error.length) {
+    if (!err) {
       addTask(newTask, selectedDate, setBusyDates);
       setIsCreateInProcess(false);
+      setNewTask({ title: '', color: ETaskColor.AZURE });
     }
   };
 

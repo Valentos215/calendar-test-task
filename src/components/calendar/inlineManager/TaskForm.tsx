@@ -20,6 +20,11 @@ const StyledInput = styled.input`
   border-radius: 0.5rem;
 `;
 
+const StyledError = styled.div`
+  margin: 0.5rem 1rem;
+  color: red;
+`;
+
 type TTaskFormProps = {
   newTask: ITask;
   setNewTask: (value: ITask) => void;
@@ -43,11 +48,14 @@ const TaskForm = ({
   };
 
   return (
-    <StyledTaskForm>
-      <StyledInput value={newTask.title} onChange={onInputChange} />
-      <ButtonIcon onButtonClick={onCancelClick} iconSrc={cancelLogo} />
-      <ButtonIcon onButtonClick={onConfirmClick} iconSrc={confirmLogo} />
-    </StyledTaskForm>
+    <>
+      <StyledTaskForm>
+        <StyledInput value={newTask.title} onChange={onInputChange} />
+        <ButtonIcon onButtonClick={onCancelClick} iconSrc={cancelLogo} />
+        <ButtonIcon onButtonClick={onConfirmClick} iconSrc={confirmLogo} />
+      </StyledTaskForm>
+      <StyledError>{error}</StyledError>
+    </>
   );
 };
 
