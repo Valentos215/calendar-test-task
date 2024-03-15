@@ -6,7 +6,6 @@ import InlineManager from './inlineManager/InlineManager';
 import { findHoliday, findTasks } from './utils/calendar-utils';
 import useLocalStorage from 'shared/hooks/useLocalStorage';
 import { useEffect, useState } from 'react';
-import { ITask } from 'types/types';
 
 const StyledCalendar = styled.div`
   display: flex;
@@ -45,7 +44,13 @@ const Calendar = ({ selectedDate, setSelectedDate }: TCalendarProps) => {
         setSelectedDate={setSelectedDate}
         busyDates={exampleBusyDates}
       />
-      <InlineManager tasks={tasks} selectedDate={selectedDate} holiday={holiday} />
+      <InlineManager
+        tasks={tasks}
+        selectedDate={selectedDate}
+        holiday={holiday}
+        busyDates={busyDates}
+        setBusyDates={setBusyDates}
+      />
     </StyledCalendar>
   );
 };

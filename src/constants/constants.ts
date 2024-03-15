@@ -82,3 +82,8 @@ export const exampleBusyDates: IBusyDate[] = [
     ],
   },
 ];
+
+export enum EFormError {
+  SHORT = 'The task must be longer than 5 characters',
+  EXIST = 'Such a task has already been created',
+}

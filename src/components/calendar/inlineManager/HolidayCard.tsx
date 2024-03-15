@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 const StyledHolidayCard = styled.div`
   background: #999;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   line-height: 2.5rem;
-  margin-top: 0.5rem;
-  padding-left: 2rem;
+  margin: 0 1rem 0.5rem 1rem;
+  padding: 0 1rem;
   border-radius: 0.5rem;
 `;
 
