@@ -5,7 +5,7 @@ import { Moment } from 'moment';
 import { editTask, removeTask } from './utils/inline-manager-utils';
 import TaskForm from './TaskForm';
 import ButtonIcon from './ButtonIcon';
-import { EFormError, ETaskColor } from 'constants/constants';
+import { ETaskColor } from 'constants/constants';
 import editLogo from 'assets/edit.svg';
 import basketLogo from 'assets/basket.svg';
 
@@ -32,11 +32,18 @@ const StyledTitle = styled.div`
 type TTaskCardProps = {
   task: ITask;
   selectedDate: Moment;
+  busyDates: IBusyDate[];
   setBusyDates: (value: IBusyDate[]) => void;
   setIsSomeChangingNow: (value: boolean) => void;
 };
 
-const TaskCard = ({ task, selectedDate, setBusyDates, setIsSomeChangingNow }: TTaskCardProps) => {
+const TaskCard = ({
+  task,
+  selectedDate,
+  busyDates,
+  setBusyDates,
+  setIsSomeChangingNow,
+}: TTaskCardProps) => {
   const [isActive, setIsActive] = useState(false);
   const [isChangingNow, setIsChangingNow] = useState<boolean>(false);
   const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
@@ -58,12 +65,7 @@ const TaskCard = ({ task, selectedDate, setBusyDates, setIsSomeChangingNow }: TT
   };
 
   const onConfirmClick = () => {
-    let err = '';
-    if (!newTask?.title.length || newTask?.title.length <= 5) {
-      setError(EFormError.SHORT);
-      err = 'err';
-    }
-    if (!err) {
+    if (!error) {
       editTask(task, newTask, selectedDate, setBusyDates);
       setIsChangingNow(false);
       setIsSomeChangingNow(false);
@@ -79,6 +81,7 @@ const TaskCard = ({ task, selectedDate, setBusyDates, setIsSomeChangingNow }: TT
           onMouseLeave={() => setIsActive(false)}
         >
           <StyledTitle>{task.title}</StyledTitle>
+
           {isActive && (
             <>
               <ButtonIcon onButtonClick={onEditClick} iconSrc={editLogo} />
@@ -87,6 +90,7 @@ const TaskCard = ({ task, selectedDate, setBusyDates, setIsSomeChangingNow }: TT
           )}
         </StyledTaskCard>
       )}
+
       {isChangingNow && (
         <TaskForm
           newTask={newTask}
@@ -95,6 +99,8 @@ const TaskCard = ({ task, selectedDate, setBusyDates, setIsSomeChangingNow }: TT
           setError={setError}
           onCancelClick={onCancelClick}
           onConfirmClick={onConfirmClick}
+          selectedDate={selectedDate}
+          busyDates={busyDates}
         />
       )}
     </>

@@ -1,8 +1,11 @@
 import styled from 'styled-components';
-import { ITask } from 'types/types';
+import { IBusyDate, ITask } from 'types/types';
 import confirmLogo from 'assets/ok.svg';
 import cancelLogo from 'assets/cancel.svg';
 import ButtonIcon from './ButtonIcon';
+import { EFormError } from 'constants/constants';
+import { findTask } from './utils/inline-manager-utils';
+import { Moment } from 'moment';
 
 const StyledTaskForm = styled.div`
   display: flex;
@@ -32,6 +35,8 @@ type TTaskFormProps = {
   setError: (value: string) => void;
   onCancelClick: () => void;
   onConfirmClick: () => void;
+  selectedDate: Moment;
+  busyDates: IBusyDate[];
 };
 
 const TaskForm = ({
@@ -41,10 +46,21 @@ const TaskForm = ({
   setError,
   onCancelClick,
   onConfirmClick,
+  selectedDate,
+  busyDates,
 }: TTaskFormProps) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('');
-    setNewTask({ ...newTask, title: e.target.value });
+    if (!newTask?.title.length || newTask?.title.length <= 5) {
+      setError(EFormError.SHORT);
+    }
+    if (newTask?.title.length > 60) {
+      setError(EFormError.LONG);
+    }
+    if (findTask(newTask, selectedDate, busyDates)) {
+      setError(EFormError.EXIST);
+    }
+    setNewTask({ ...newTask, title: e.target.value.slice(0, 61) });
   };
 
   return (

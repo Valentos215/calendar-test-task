@@ -4,9 +4,9 @@ import { IBusyDate, ITask } from 'types/types';
 import TaskCard from './TaskCard';
 import { Moment } from 'moment';
 import HolidayCard from './HolidayCard';
-import { EFormError, ETaskColor } from 'constants/constants';
+import { ETaskColor } from 'constants/constants';
 import TaskForm from './TaskForm';
-import { addTask, findTask } from './utils/inline-manager-utils';
+import { addTask } from './utils/inline-manager-utils';
 import plusLogo from 'assets/plus.svg';
 import ButtonIcon from './ButtonIcon';
 
@@ -59,16 +59,7 @@ const InlineManager = ({
   };
 
   const onConfirmClick = () => {
-    let err = '';
-    if (!newTask?.title.length || newTask?.title.length <= 5) {
-      setError(EFormError.SHORT);
-      err = 'err';
-    }
-    if (findTask(newTask, selectedDate, busyDates)) {
-      setError(EFormError.EXIST);
-      err = 'err';
-    }
-    if (!err) {
+    if (!error) {
       addTask(newTask, selectedDate, setBusyDates);
       setIsCreateInProcess(false);
       setNewTask({ title: '', color: ETaskColor.AZURE });
@@ -87,6 +78,7 @@ const InlineManager = ({
             setBusyDates={setBusyDates}
             setIsSomeChangingNow={setIsSomeChangingNow}
             key={task.title}
+            busyDates={busyDates}
           />
         ))}
       {isCreateInProcess && (
@@ -97,6 +89,8 @@ const InlineManager = ({
           setError={setError}
           onCancelClick={onCancelClick}
           onConfirmClick={onConfirmClick}
+          selectedDate={selectedDate}
+          busyDates={busyDates}
         />
       )}
       {!isCreateInProcess && !isSomeChangingNow && (

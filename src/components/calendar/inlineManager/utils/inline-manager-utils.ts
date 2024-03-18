@@ -71,8 +71,9 @@ export const editTask = (prevTask: ITask, newTask: ITask, date: Moment, setBusyD
       if (compareDates(busyDate, date)) {
         const newTasks = busyDate.tasks.map((task) => {
           if (task.title === prevTask.title) {
-            return { ...newTask };
+            return newTask;
           }
+          return task;
         });
         return { ...busyDate, tasks: newTasks };
       }

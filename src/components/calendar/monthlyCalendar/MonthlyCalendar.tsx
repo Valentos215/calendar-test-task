@@ -36,7 +36,7 @@ const MonthlyCalendar = ({ selectedDate, setSelectedDate, busyDates }: TMonthlyC
   return (
     <StyledCalendar>
       {weekDays.map((wd) => (
-        <WeekDayCell>{wd}</WeekDayCell>
+        <WeekDayCell key={wd}>{wd}</WeekDayCell>
       ))}
       {calendarState.map((d: ICalendarDate) => (
         <CalendarCell
