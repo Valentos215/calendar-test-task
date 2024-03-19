@@ -27,7 +27,7 @@ const Calendar = ({ selectedDate, setSelectedDate }: TCalendarProps) => {
 
   useEffect(() => {
     if (localBusyDates) {
-      // setBusyDates(JSON.parse(localBusyDates));
+      setBusyDates(JSON.parse(localBusyDates));
     }
   }, []);
 

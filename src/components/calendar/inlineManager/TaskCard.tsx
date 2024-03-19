@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import { Moment } from 'moment';
@@ -11,7 +11,7 @@ import basketLogo from 'assets/basket.svg';
 
 const StyledTaskCard = styled.div`
   background: ${(props) => props.color};
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 2.5rem;
   margin: 0 1rem 0.5rem 1rem;
   padding: 0 1rem;
@@ -33,7 +33,7 @@ type TTaskCardProps = {
   task: ITask;
   selectedDate: Moment;
   busyDates: IBusyDate[];
-  setBusyDates: (value: IBusyDate[]) => void;
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
   setIsSomeChangingNow: (value: boolean) => void;
 };
 

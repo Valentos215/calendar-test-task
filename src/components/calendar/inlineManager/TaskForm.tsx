@@ -19,7 +19,7 @@ const StyledInput = styled.input`
   flex: 1 0 auto;
   height: 2.5rem;
   padding: 0 1rem;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   border-radius: 0.5rem;
 `;
 

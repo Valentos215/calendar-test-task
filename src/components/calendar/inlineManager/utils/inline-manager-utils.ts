@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { Dispatch, SetStateAction } from 'react';
 import { IBusyDate, ITask } from 'types/types';
 
 const compareDates = (busyDate: IBusyDate, date: Moment) => {
@@ -9,7 +10,11 @@ const compareDates = (busyDate: IBusyDate, date: Moment) => {
   );
 };
 
-export const removeTask = (task: ITask, date: Moment, setBusyDates: any) => {
+export const removeTask = (
+  task: ITask,
+  date: Moment,
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
+) => {
   setBusyDates((prevBusyDates: IBusyDate[]) => {
     if (prevBusyDates.length) {
       const foundBusyDay = prevBusyDates.find((bd) => compareDates(bd, date));
@@ -35,7 +40,11 @@ export const removeTask = (task: ITask, date: Moment, setBusyDates: any) => {
   });
 };
 
-export const addTask = (task: ITask, date: Moment, setBusyDates: any) => {
+export const addTask = (
+  task: ITask,
+  date: Moment,
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
+) => {
   setBusyDates((prevBusyDates: IBusyDate[]) => {
     // if there are tasks in the array
 
@@ -65,7 +74,12 @@ export const addTask = (task: ITask, date: Moment, setBusyDates: any) => {
   });
 };
 
-export const editTask = (prevTask: ITask, newTask: ITask, date: Moment, setBusyDates: any) => {
+export const editTask = (
+  prevTask: ITask,
+  newTask: ITask,
+  date: Moment,
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
+) => {
   setBusyDates((prevBusyDates: IBusyDate[]) => {
     return prevBusyDates.map((busyDate) => {
       if (compareDates(busyDate, date)) {

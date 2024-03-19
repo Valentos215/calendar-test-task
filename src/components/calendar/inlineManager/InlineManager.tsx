@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import TaskCard from './TaskCard';
@@ -27,7 +27,7 @@ type TInlineManagerProps = {
   selectedDate: Moment;
   holiday: string | null;
   busyDates: IBusyDate[];
-  setBusyDates: (value: IBusyDate[]) => void;
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
 };
 
 const InlineManager = ({
