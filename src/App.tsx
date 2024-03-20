@@ -13,10 +13,11 @@ const AppWrapper = styled.div`
 
 const Container = styled.div`
   width: 80vw;
-  max-width: 1200px;
+  max-width: 1000px;
   background: rgb(238, 239, 241);
   display: flex;
   flex-direction: column;
+  padding-bottom: 5rem;
   @media (max-width: 1000px) {
     width: 100%;
   }
