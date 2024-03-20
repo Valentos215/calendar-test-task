@@ -1,47 +1,59 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Moment } from 'moment';
 import styled from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import TaskCard from './TaskCard';
-import { Moment } from 'moment';
 import HolidayCard from './HolidayCard';
 import { ETaskColor } from 'constants/constants';
 import TaskForm from './TaskForm';
 import { addTask } from './utils/inline-manager-utils';
 import plusLogo from 'assets/plus.svg';
 import ButtonIcon from './ButtonIcon';
+import { findTasks } from '../utils/calendar-utils';
 
 const StyledInlineManager = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const Styledtitle = styled.div`
+const StyledTitle = styled.div`
   font-size: 1.5rem;
   line-height: 2rem;
   margin: 1rem 0;
   text-align: center;
 `;
 
+const CreateButtonField = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 type TInlineManagerProps = {
-  tasks: ITask[] | null;
   selectedDate: Moment;
   holiday: string | null;
   busyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
+  draggedTask: ITask | null;
+  setDraggedTask: (value: ITask) => void;
 };
 
 const InlineManager = ({
-  tasks,
   selectedDate,
   holiday,
   setBusyDates,
   busyDates,
+  draggedTask,
+  setDraggedTask,
 }: TInlineManagerProps) => {
   const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
   const [isSomeChangingNow, setIsSomeChangingNow] = useState<boolean>(false);
   const [isCreateInProcess, setIsCreateInProcess] = useState<boolean>(false);
   const [error, setError] = useState('');
+  const [hoveredTask, setHoveredTask] = useState<ITask | null>(null);
+
   const title = selectedDate.format('dddd, D MMMM');
+  const tasks = findTasks(busyDates, selectedDate);
 
   useEffect(() => {
     if (isSomeChangingNow) {
@@ -68,7 +80,7 @@ const InlineManager = ({
 
   return (
     <StyledInlineManager>
-      <Styledtitle>{title}</Styledtitle>
+      <StyledTitle>{title}</StyledTitle>
       {!!holiday && <HolidayCard holiday={holiday} />}
       {!!tasks?.length &&
         tasks.map((task) => (
@@ -76,9 +88,14 @@ const InlineManager = ({
             task={task}
             selectedDate={selectedDate}
             setBusyDates={setBusyDates}
+            isSomeChangingNow={isSomeChangingNow}
             setIsSomeChangingNow={setIsSomeChangingNow}
             key={task.title}
             busyDates={busyDates}
+            draggedTask={draggedTask}
+            setDraggedTask={setDraggedTask}
+            hoveredTask={hoveredTask}
+            setHoveredTask={setHoveredTask}
           />
         ))}
       {isCreateInProcess && (
@@ -93,8 +110,11 @@ const InlineManager = ({
           busyDates={busyDates}
         />
       )}
+
       {!isCreateInProcess && !isSomeChangingNow && (
-        <ButtonIcon onButtonClick={onCreateClick} iconSrc={plusLogo} />
+        <CreateButtonField>
+          <ButtonIcon onButtonClick={onCreateClick} iconSrc={plusLogo} />
+        </CreateButtonField>
       )}
     </StyledInlineManager>
   );

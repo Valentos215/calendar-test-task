@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
-const StyledEditButton = styled.img`
+const StyledButtonIcon = styled.img`
   height: 1.2rem;
   margin-left: 1rem;
+  cursor: pointer;
   transition: all 0.2s ease;
   &:hover {
     transform: scale(1.1);
@@ -12,13 +13,13 @@ const StyledEditButton = styled.img`
   }
 `;
 
-type TEditButtonProps = {
+type TButtonIconProps = {
   onButtonClick: () => void;
   iconSrc: string;
 };
 
-const ButtonIcon = ({ onButtonClick, iconSrc }: TEditButtonProps) => {
-  return <StyledEditButton alt={iconSrc.split('/')[-1]} src={iconSrc} onClick={onButtonClick} />;
+const ButtonIcon = ({ onButtonClick, iconSrc }: TButtonIconProps) => {
+  return <StyledButtonIcon alt={iconSrc.split('/')[-1]} src={iconSrc} onClick={onButtonClick} />;
 };
 
 export default ButtonIcon;

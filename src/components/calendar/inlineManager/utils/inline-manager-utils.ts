@@ -1,5 +1,6 @@
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { Dispatch, SetStateAction } from 'react';
+import { ETaskColor } from 'constants/constants';
 import { IBusyDate, ITask } from 'types/types';
 
 const compareDates = (busyDate: IBusyDate, date: Moment) => {
@@ -16,26 +17,28 @@ export const removeTask = (
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
 ) => {
   setBusyDates((prevBusyDates: IBusyDate[]) => {
-    if (prevBusyDates.length) {
-      const foundBusyDay = prevBusyDates.find((bd) => compareDates(bd, date));
-      const tasksLength = foundBusyDay ? foundBusyDay.tasks.length : null;
+    const foundBusyDate = prevBusyDates.find((bd) => compareDates(bd, date));
+    const tasksLength = foundBusyDate ? foundBusyDate.tasks.length : null;
 
-      // if there is only one task in the array
+    if (tasksLength === 1) {
+      // if there is only one task that date
 
-      if (tasksLength === 1) {
-        return prevBusyDates.filter((bd) => !compareDates(bd, date));
-      }
+      return prevBusyDates.filter((bd) => !compareDates(bd, date));
+      // remove the entire day from the array
     }
 
     // if there is more than one task in the array
 
-    return prevBusyDates.map((busyDay) => {
-      if (compareDates(busyDay, date)) {
-        const newTasks = busyDay.tasks.filter((t) => !(t.title === task.title));
-        return { ...busyDay, tasks: newTasks };
+    return prevBusyDates.map((busyDate) => {
+      if (compareDates(busyDate, date)) {
+        const newTasks = busyDate.tasks.filter((t) => !(t.title === task.title));
+        // remove the task from current date
+
+        return { ...busyDate, tasks: newTasks };
       }
 
-      return busyDay;
+      return busyDate;
+      // return the remaining dates without changes
     });
   });
 };
@@ -46,18 +49,23 @@ export const addTask = (
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
 ) => {
   setBusyDates((prevBusyDates: IBusyDate[]) => {
-    // if there are tasks in the array
-
     if (prevBusyDates.length) {
+      // if there are busy days in the array
+
       const foundBusyDay = prevBusyDates.find((busyDate) => compareDates(busyDate, date));
 
-      if (!!foundBusyDay) {
+      if (foundBusyDay) {
+        // if there are other tasks in the current day
+
         return prevBusyDates.map((busyDate) => {
           if (compareDates(busyDate, date)) {
             const newTasks = [...busyDate.tasks, task];
             return { ...busyDate, tasks: newTasks };
+            // add a new task to the current day
           }
+
           return busyDate;
+          // return the remaining dates without changes
         });
       }
     }
@@ -71,6 +79,7 @@ export const addTask = (
       tasks: [task],
     };
     return [...prevBusyDates, newBusyDate];
+    // add a new day with a new task
   });
 };
 
@@ -83,24 +92,109 @@ export const editTask = (
   setBusyDates((prevBusyDates: IBusyDate[]) => {
     return prevBusyDates.map((busyDate) => {
       if (compareDates(busyDate, date)) {
+        // if the day in the array matches the current day
+
         const newTasks = busyDate.tasks.map((task) => {
           if (task.title === prevTask.title) {
+            //if we found prev task in the array
+
             return newTask;
+            // replace prev task with a new one
           }
           return task;
+          // return the remaining tasks without changes
         });
         return { ...busyDate, tasks: newTasks };
+        // return the old day with new tasks
       }
       return busyDate;
+      // return the remaining dates without changes
     });
   });
 };
 
-export const findTask = (task: ITask, date: Moment, busyDates: IBusyDate[]) => {
+export const getIsTaskExist = (task: ITask, date: Moment, busyDates: IBusyDate[]) => {
   if (busyDates.length) {
     const foundBusyDay = busyDates.find((busyDate) => compareDates(busyDate, date));
 
     return foundBusyDay?.tasks.some((t) => t.title === task.title);
   }
   return false;
+};
+
+export const changeColor = (setNewTask: Dispatch<SetStateAction<any>>) => {
+  setNewTask((prevTask: ITask) => {
+    const index = Object.values(ETaskColor).indexOf(prevTask.color);
+    let nextColor = '';
+
+    if (index === Object.values(ETaskColor).length - 1) {
+      // if this is the last element of enum
+
+      nextColor = Object.values(ETaskColor)[0];
+      // select the first element of enum
+    } else {
+      nextColor = Object.values(ETaskColor)[index + 1];
+      // else select the next element of enum
+    }
+    return { ...prevTask, color: nextColor };
+    // return prev task with a new color
+  });
+};
+
+export const reorderTask = (
+  prevTask: ITask,
+  newTask: ITask | null,
+  date: Moment,
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
+) => {
+  if (!newTask || prevTask.title === newTask.title) return;
+
+  setBusyDates((prevBusyDates: IBusyDate[]) => {
+    return prevBusyDates.map((busyDate) => {
+      if (compareDates(busyDate, date)) {
+        // if the day in the array matches the current day
+
+        let newTasks: ITask[] = [];
+        const indexOfPrevTask = busyDate.tasks.findIndex((task) => task.title === prevTask.title);
+        const indexOfNewTask = busyDate.tasks.findIndex((task) => task.title === newTask.title);
+        busyDate.tasks.forEach((task) => {
+          if (task.title !== newTask.title && task.title !== prevTask.title) {
+            // push tasks that are not involved in dragging into the array
+            newTasks.push(task);
+          }
+          if (task.title === prevTask.title) {
+            if (indexOfPrevTask > indexOfNewTask) {
+              // if the dragged task is in front of the current task
+              newTasks.push(prevTask);
+              newTasks.push(newTask);
+            } else {
+              // if the dragged task comes after the current task
+              newTasks.push(newTask);
+              newTasks.push(prevTask);
+            }
+          }
+        });
+        return { ...busyDate, tasks: newTasks };
+        // return the old day with new tasks
+      }
+      return busyDate;
+      // return the remaining dates without changes
+    });
+  });
+};
+
+export const reassignTask = (
+  task: ITask | null,
+  currentDate: Moment,
+  newDateNumber: number | null,
+  setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
+) => {
+  if (!task || !newDateNumber) return;
+
+  removeTask(task, currentDate, setBusyDates);
+  // remove the task from the current day
+
+  const newDate = moment(currentDate.clone().set('D', newDateNumber));
+  addTask(task, newDate, setBusyDates);
+  // add a task to a new date
 };

@@ -42,9 +42,9 @@ export const createMonthlyCalendar = (
   const currentDate = startOfFirstWeek.clone();
 
   while (currentDate.isSameOrBefore(endOfLastWeek)) {
-    //adding empty calendar cells to the array
-
     if (currentDate.isBefore(endOfPrevMonth) || currentDate.isAfter(startOfNextMonth)) {
+      //adding empty calendar cells to the array
+
       calendar.push({
         date: null,
         tasks: [],
@@ -54,10 +54,10 @@ export const createMonthlyCalendar = (
       });
     }
 
-    //adding the filled calendar cells to the array
-
     if (currentDate.isSameOrAfter(endOfPrevMonth) && currentDate.isSameOrBefore(startOfNextMonth)) {
       const tasks = findTasks(busyDates, currentDate);
+
+      //adding the filled calendar cells to the array
 
       calendar.push({
         date: currentDate.date(),
@@ -71,4 +71,18 @@ export const createMonthlyCalendar = (
     currentDate.add(1, 'day');
   }
   return calendar;
+};
+
+export const filterBusyDates = (busyDates: IBusyDate[], filter: string): IBusyDate[] => {
+  if (!filter) {
+    return busyDates;
+  }
+
+  return busyDates.map((busyDate) => {
+    const filteredTasks = busyDate.tasks.filter(
+      (task) => task.title.toUpperCase().indexOf(filter.toUpperCase()) >= 0,
+    );
+
+    return { ...busyDate, tasks: filteredTasks };
+  });
 };

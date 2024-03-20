@@ -1,15 +1,15 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import styled from 'styled-components';
-import { IBusyDate, ITask } from 'types/types';
+import { Dispatch, DragEvent, SetStateAction, useState } from 'react';
 import { Moment } from 'moment';
-import { editTask, removeTask } from './utils/inline-manager-utils';
+import styled, { css } from 'styled-components';
+import { IBusyDate, ITask } from 'types/types';
+import { editTask, reorderTask, removeTask } from './utils/inline-manager-utils';
 import TaskForm from './TaskForm';
 import ButtonIcon from './ButtonIcon';
 import { ETaskColor } from 'constants/constants';
 import editLogo from 'assets/edit.svg';
 import basketLogo from 'assets/basket.svg';
 
-const StyledTaskCard = styled.div`
+const StyledTaskCard = styled.div<{ color: string; isHovered: boolean }>`
   background: ${(props) => props.color};
   font-size: 1.2rem;
   line-height: 2.5rem;
@@ -19,14 +19,22 @@ const StyledTaskCard = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  cursor: pointer;
+  cursor: grab;
   &:hover {
     box-shadow: 0 0 0.3rem #999;
   }
+  ${(props) =>
+    props.isHovered
+      ? css`
+          box-shadow: 0 0 1rem #535353;
+        `
+      : css`
+          box-shadow: none;
+        `};
 `;
 
 const StyledTitle = styled.div`
-  flex: 1 0 auto;
+  flex: 1 1 auto;
 `;
 
 type TTaskCardProps = {
@@ -34,7 +42,12 @@ type TTaskCardProps = {
   selectedDate: Moment;
   busyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
+  isSomeChangingNow: boolean;
   setIsSomeChangingNow: (value: boolean) => void;
+  draggedTask: ITask | null;
+  setDraggedTask: (value: ITask) => void;
+  hoveredTask: ITask | null;
+  setHoveredTask: (value: ITask | null) => void;
 };
 
 const TaskCard = ({
@@ -42,14 +55,19 @@ const TaskCard = ({
   selectedDate,
   busyDates,
   setBusyDates,
+  isSomeChangingNow,
   setIsSomeChangingNow,
+  draggedTask,
+  setDraggedTask,
+  hoveredTask,
+  setHoveredTask,
 }: TTaskCardProps) => {
-  const [isActive, setIsActive] = useState(false);
   const [isChangingNow, setIsChangingNow] = useState<boolean>(false);
   const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
   const [error, setError] = useState('');
 
   const onEditClick = () => {
+    if (isSomeChangingNow) return;
     setNewTask(task);
     setIsChangingNow(true);
     setIsSomeChangingNow(true);
@@ -72,22 +90,42 @@ const TaskCard = ({
     }
   };
 
+  const dragStartHandler = (e: DragEvent<HTMLDivElement>, task: ITask) => {
+    setDraggedTask(task);
+  };
+
+  const dragEndHandler = (e: DragEvent<HTMLDivElement>) => {
+    setHoveredTask(null);
+  };
+
+  const dragOverHandler = (e: DragEvent<HTMLDivElement>, task: ITask) => {
+    e.preventDefault();
+    setHoveredTask(task);
+  };
+
+  const dropHandler = (e: DragEvent<HTMLDivElement>, task: ITask) => {
+    e.preventDefault();
+    reorderTask(task, draggedTask, selectedDate, setBusyDates);
+  };
+
+  const isHovered = hoveredTask?.title === task.title;
+
   return (
     <>
       {!isChangingNow && (
         <StyledTaskCard
-          {...task}
-          onMouseEnter={() => setIsActive(true)}
-          onMouseLeave={() => setIsActive(false)}
+          color={task.color}
+          isHovered={isHovered}
+          draggable={true}
+          onDragStart={(e: DragEvent<HTMLDivElement>) => dragStartHandler(e, task)}
+          onDragLeave={(e: DragEvent<HTMLDivElement>) => dragEndHandler(e)}
+          onDragEnd={(e: DragEvent<HTMLDivElement>) => dragEndHandler(e)}
+          onDragOver={(e: DragEvent<HTMLDivElement>) => dragOverHandler(e, task)}
+          onDrop={(e: DragEvent<HTMLDivElement>) => dropHandler(e, task)}
         >
           <StyledTitle>{task.title}</StyledTitle>
-
-          {isActive && (
-            <>
-              <ButtonIcon onButtonClick={onEditClick} iconSrc={editLogo} />
-              <ButtonIcon onButtonClick={onRemoveClick} iconSrc={basketLogo} />
-            </>
-          )}
+          <ButtonIcon onButtonClick={onEditClick} iconSrc={editLogo} />
+          <ButtonIcon onButtonClick={onRemoveClick} iconSrc={basketLogo} />
         </StyledTaskCard>
       )}
 

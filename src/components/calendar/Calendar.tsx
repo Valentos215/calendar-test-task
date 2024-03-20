@@ -1,12 +1,12 @@
+import { useEffect, useState } from 'react';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import MonthlyCalendar from 'components/calendar/monthlyCalendar/MonthlyCalendar';
-import { holidays } from 'constants/constants';
 import InlineManager from './inlineManager/InlineManager';
-import { findHoliday, findTasks } from './utils/calendar-utils';
 import useLocalStorage from 'shared/hooks/useLocalStorage';
-import { useEffect, useState } from 'react';
-import { IBusyDate } from 'types/types';
+import { holidays } from 'constants/constants';
+import { filterBusyDates, findHoliday } from './utils/calendar-utils';
+import { IBusyDate, ITask } from 'types/types';
 
 const StyledCalendar = styled.div`
   display: flex;
@@ -16,13 +16,14 @@ const StyledCalendar = styled.div`
 type TCalendarProps = {
   selectedDate: Moment;
   setSelectedDate: (value: Moment) => void;
+  filter: string;
 };
 
-const Calendar = ({ selectedDate, setSelectedDate }: TCalendarProps) => {
+const Calendar = ({ selectedDate, setSelectedDate, filter }: TCalendarProps) => {
   const [localBusyDates, setLocalBusyDates] = useLocalStorage('');
   const [busyDates, setBusyDates] = useState<IBusyDate[]>([]);
+  const [draggedTask, setDraggedTask] = useState<ITask | null>(null);
 
-  const tasks = findTasks(busyDates, selectedDate);
   const holiday = findHoliday(holidays, selectedDate);
 
   useEffect(() => {
@@ -36,21 +37,26 @@ const Calendar = ({ selectedDate, setSelectedDate }: TCalendarProps) => {
       return;
     }
     setLocalBusyDates(JSON.stringify(busyDates));
-  }, [busyDates, setBusyDates]);
+  }, [busyDates, setLocalBusyDates]);
+
+  const filteredBusyDates = filterBusyDates(busyDates, filter);
 
   return (
     <StyledCalendar>
       <MonthlyCalendar
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-        busyDates={busyDates}
+        busyDates={filteredBusyDates}
+        draggedTask={draggedTask}
+        setBusyDates={setBusyDates}
       />
       <InlineManager
-        tasks={tasks}
         selectedDate={selectedDate}
         holiday={holiday}
-        busyDates={busyDates}
+        busyDates={filteredBusyDates}
         setBusyDates={setBusyDates}
+        draggedTask={draggedTask}
+        setDraggedTask={setDraggedTask}
       />
     </StyledCalendar>
   );

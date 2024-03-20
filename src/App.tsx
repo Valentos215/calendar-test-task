@@ -24,12 +24,18 @@ const Container = styled.div`
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(moment);
+  const [filter, setFilter] = useState('');
 
   return (
     <AppWrapper>
       <Container>
-        <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+        <Header
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          filter={filter}
+          setFilter={setFilter}
+        />
+        <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} filter={filter} />
       </Container>
     </AppWrapper>
   );
