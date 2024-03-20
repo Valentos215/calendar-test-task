@@ -31,9 +31,7 @@ export const removeTask = (
 
     return prevBusyDates.map((busyDate) => {
       if (compareDates(busyDate, date)) {
-        const newTasks = busyDate.tasks.filter(
-          (t) => !(t.title === task.title && t.color === task.color),
-        );
+        const newTasks = busyDate.tasks.filter((t) => !(t.title === task.title));
         // remove the task from current date
 
         return { ...busyDate, tasks: newTasks };
