@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import CalendarCell from './CalendarCell';
-import { createMonthlyCalendar } from 'components/calendar/utils/calendar-utils';
+import { createMonthlyCalendar, setDate } from 'components/calendar/utils/calendar-utils';
 import { holidays, weekDays } from 'constants/constants';
 import { IBusyDate, ICalendarDate, ITask } from 'types/types';
 
@@ -21,7 +21,7 @@ const WeekDayCell = styled.div`
 
 type TMonthlyCalendarProps = {
   selectedDate: Moment;
-  setSelectedDate: (value: Moment) => void;
+  setSelectedDate: Dispatch<SetStateAction<Moment>>;
   busyDates: IBusyDate[];
   draggedTask: ITask | null;
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
@@ -38,9 +38,7 @@ const MonthlyCalendar = ({
   const [hoveredDate, setHoveredDate] = useState<ICalendarDate | null>(null);
 
   const onCellClick = (date: ICalendarDate) => {
-    if (date.isRelevant) {
-      setSelectedDate(selectedDate.clone().set('date', date.date || 1));
-    }
+    setDate(date, setSelectedDate);
   };
 
   return (

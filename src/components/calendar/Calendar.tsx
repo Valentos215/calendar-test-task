@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import MonthlyCalendar from 'components/calendar/monthlyCalendar/MonthlyCalendar';
@@ -15,7 +15,7 @@ const StyledCalendar = styled.div`
 
 type TCalendarProps = {
   selectedDate: Moment;
-  setSelectedDate: (value: Moment) => void;
+  setSelectedDate: Dispatch<SetStateAction<Moment>>;
   filter: string;
 };
 

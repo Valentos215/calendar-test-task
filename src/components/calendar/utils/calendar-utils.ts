@@ -1,4 +1,5 @@
 import moment, { Moment } from 'moment';
+import { Dispatch, SetStateAction } from 'react';
 import { IBusyDate, ICalendarDate, IHoliday, ITask } from 'types/types';
 
 const isSameDates = (date1: Moment, date2: Moment): boolean => {
@@ -84,5 +85,26 @@ export const filterBusyDates = (busyDates: IBusyDate[], filter: string): IBusyDa
     );
 
     return { ...busyDate, tasks: filteredTasks };
+  });
+};
+
+export const setDate = (date: ICalendarDate, setSelectedDate: Dispatch<SetStateAction<Moment>>) => {
+  if (!date.date) {
+    return;
+  }
+
+  setSelectedDate((prevDate) => {
+    if (date.isRelevant) {
+      return prevDate.clone().set('date', date.date || 1);
+    } else if (date.date === 1) {
+      // if the day is in the next month
+      return prevDate.clone().add(1, 'M').startOf('M');
+    } else {
+      // if the day is in the previous month
+      return prevDate
+        .clone()
+        .subtract(1, 'M')
+        .set('D', date.date || 1);
+    }
   });
 };

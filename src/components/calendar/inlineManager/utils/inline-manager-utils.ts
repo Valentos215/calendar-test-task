@@ -1,7 +1,7 @@
 import moment, { Moment } from 'moment';
 import { Dispatch, SetStateAction } from 'react';
 import { ETaskColor } from 'constants/constants';
-import { IBusyDate, ITask } from 'types/types';
+import { IBusyDate, ICalendarDate, ITask } from 'types/types';
 
 const compareDates = (busyDate: IBusyDate, date: Moment) => {
   return (
@@ -186,15 +186,33 @@ export const reorderTask = (
 export const reassignTask = (
   task: ITask | null,
   currentDate: Moment,
-  newDateNumber: number | null,
+  newDate: ICalendarDate | null,
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>,
 ) => {
-  if (!task || !newDateNumber) return;
+  if (!task || !newDate || newDate.date === null) {
+    return;
+  }
 
   removeTask(task, currentDate, setBusyDates);
   // remove the task from the current day
 
-  const newDate = moment(currentDate.clone().set('D', newDateNumber));
-  addTask(task, newDate, setBusyDates);
-  // add a task to a new date
+  if (newDate.isRelevant) {
+    // if the day is in the current month
+    const newMomentDate = moment(currentDate.clone().set('D', newDate.date));
+    addTask(task, newMomentDate, setBusyDates);
+    // add a task to a new date
+  } else {
+    if (newDate.date === 1) {
+      // if the day is in the next month
+      const newMomentDate = moment(currentDate.clone().add(1, 'M').startOf('month'));
+
+      addTask(task, newMomentDate, setBusyDates);
+    } else {
+      // if the day is in the previous month
+
+      const newMomentDate = moment(currentDate.clone().subtract(1, 'M').set('D', newDate.date));
+
+      addTask(task, newMomentDate, setBusyDates);
+    }
+  }
 };

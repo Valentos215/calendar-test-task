@@ -41,13 +41,10 @@ const StyledDateCell = styled.div<IStyledCellProps>`
       box-shadow: 0 0 1rem #999;
     `}
   ${(props) =>
-    props.isHovered
-      ? css`
-          box-shadow: 0 0 1rem #535353;
-        `
-      : css`
-          box-shadow: none;
-        `};
+    props.isHovered &&
+    css`
+      box-shadow: 0 0 1rem #535353;
+    `};
 `;
 
 const Date = styled.div`
@@ -93,7 +90,7 @@ const CalendarCell = ({
 
   const dropHandler = (e: DragEvent<HTMLDivElement>, date: ICalendarDate) => {
     e.preventDefault();
-    reassignTask(draggedTask, selectedDate, date.date, setBusyDates);
+    reassignTask(draggedTask, selectedDate, date, setBusyDates);
   };
 
   const isSelected = !!date.date && date.date === selectedDate.date();
