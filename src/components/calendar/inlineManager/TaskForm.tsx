@@ -39,6 +39,7 @@ type TTaskFormProps = {
   onConfirmClick: () => void;
   selectedDate: Moment;
   busyDates: IBusyDate[];
+  isTaskChanging: boolean;
 };
 
 const TaskForm = ({
@@ -50,6 +51,7 @@ const TaskForm = ({
   onConfirmClick,
   selectedDate,
   busyDates,
+  isTaskChanging,
 }: TTaskFormProps) => {
   useEffect(() => {
     setError('');
@@ -59,10 +61,10 @@ const TaskForm = ({
     if (newTask?.title.length > 60) {
       setError(EFormError.LONG);
     }
-    if (getIsTaskExist(newTask, selectedDate, busyDates)) {
+    if (getIsTaskExist(newTask, selectedDate, busyDates) && !isTaskChanging) {
       setError(EFormError.EXIST);
     }
-  }, [newTask, setError, selectedDate, busyDates]);
+  }, [newTask, setError, selectedDate, busyDates, isTaskChanging]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTask({ ...newTask, title: e.target.value.slice(0, 61) });

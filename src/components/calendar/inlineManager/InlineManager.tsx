@@ -108,6 +108,7 @@ const InlineManager = ({
           onConfirmClick={onConfirmClick}
           selectedDate={selectedDate}
           busyDates={busyDates}
+          isTaskChanging={false}
         />
       )}
 

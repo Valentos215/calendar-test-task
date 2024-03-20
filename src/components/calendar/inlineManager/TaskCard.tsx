@@ -62,14 +62,14 @@ const TaskCard = ({
   hoveredTask,
   setHoveredTask,
 }: TTaskCardProps) => {
-  const [isChangingNow, setIsChangingNow] = useState<boolean>(false);
+  const [isChangingInProcess, setIsChangingInProcess] = useState<boolean>(false);
   const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
   const [error, setError] = useState('');
 
   const onEditClick = () => {
     if (isSomeChangingNow) return;
     setNewTask(task);
-    setIsChangingNow(true);
+    setIsChangingInProcess(true);
     setIsSomeChangingNow(true);
   };
 
@@ -78,14 +78,14 @@ const TaskCard = ({
   };
 
   const onCancelClick = () => {
-    setIsChangingNow(false);
+    setIsChangingInProcess(false);
     setIsSomeChangingNow(false);
   };
 
   const onConfirmClick = () => {
     if (!error) {
       editTask(task, newTask, selectedDate, setBusyDates);
-      setIsChangingNow(false);
+      setIsChangingInProcess(false);
       setIsSomeChangingNow(false);
     }
   };
@@ -112,7 +112,7 @@ const TaskCard = ({
 
   return (
     <>
-      {!isChangingNow && (
+      {!isChangingInProcess && (
         <StyledTaskCard
           color={task.color}
           isHovered={isHovered}
@@ -129,7 +129,7 @@ const TaskCard = ({
         </StyledTaskCard>
       )}
 
-      {isChangingNow && (
+      {isChangingInProcess && (
         <TaskForm
           newTask={newTask}
           setNewTask={setNewTask}
@@ -139,6 +139,7 @@ const TaskCard = ({
           onConfirmClick={onConfirmClick}
           selectedDate={selectedDate}
           busyDates={busyDates}
+          isTaskChanging={true}
         />
       )}
     </>
