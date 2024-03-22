@@ -21,16 +21,10 @@ type TCalendarProps = {
 
 const Calendar = ({ selectedDate, setSelectedDate, filter }: TCalendarProps) => {
   const [localBusyDates, setLocalBusyDates] = useLocalStorage('');
-  const [busyDates, setBusyDates] = useState<IBusyDate[]>([]);
+  const [busyDates, setBusyDates] = useState<IBusyDate[]>(JSON.parse(localBusyDates) || []);
   const [draggedTask, setDraggedTask] = useState<ITask | null>(null);
 
   const holiday = findHoliday(holidays, selectedDate);
-
-  useEffect(() => {
-    if (localBusyDates) {
-      setBusyDates(JSON.parse(localBusyDates));
-    }
-  }, []);
 
   useEffect(() => {
     if (!busyDates) {
