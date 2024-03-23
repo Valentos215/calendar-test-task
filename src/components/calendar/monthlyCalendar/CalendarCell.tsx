@@ -16,10 +16,10 @@ interface IStyledCellProps {
 const StyledDateCell = styled.div<IStyledCellProps>`
   padding: 0.3vw;
   border-radius: 0.2rem;
-  min-height: 6vw;
+  min-height: 5rem;
   transition: all 0.2s ease;
-  @media (max-width: 769px) {
-    min-height: 8vw;
+  @media (max-width: 1200px) {
+    min-height: 4rem;
   }
   &:hover {
     box-shadow: 0 0 0.3rem #999;
