@@ -41,8 +41,6 @@ function App() {
   );
   const [holidays, setHolidays] = useState<IHoliday[]>([]);
 
-  const isErrorHappened: boolean = !!error || (!isLoading && !response);
-
   useEffect(() => {
     doFetch();
   }, [doFetch]);
@@ -59,7 +57,7 @@ function App() {
           <Header isLoading={isLoading} filter={filter} setFilter={setFilter} />
           {!!response && <Calendar holidays={holidays} filter={filter} />}
           {isLoading && <Preloader />}
-          {isErrorHappened && <ErrorTitle>Some error happened</ErrorTitle>}
+          {!!error && <ErrorTitle>Some error happened</ErrorTitle>}
         </SelectedDateProvider>
       </Container>
     </AppWrapper>
