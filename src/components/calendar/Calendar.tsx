@@ -18,8 +18,8 @@ type TCalendarProps = {
 };
 
 const Calendar = ({ filter }: TCalendarProps) => {
-  const [localBusyDates, setLocalBusyDates] = useLocalStorage('');
-  const [busyDates, setBusyDates] = useState<IBusyDate[]>(JSON.parse(localBusyDates) || []);
+  const [localBusyDates, setLocalBusyDates] = useLocalStorage('Busy Dates');
+  const [busyDates, setBusyDates] = useState<IBusyDate[]>(JSON.parse(localBusyDates));
   const [selectedDate] = useContext(SelectedDateContext);
   const [draggedTask, setDraggedTask] = useState<ITask | null>(null);
 

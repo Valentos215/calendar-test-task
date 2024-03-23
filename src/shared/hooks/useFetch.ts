@@ -23,7 +23,7 @@ type Options =
     }
   | {};
 
-type Error = { fails: { name: string[] }[]; message: string };
+type Error = { message: string };
 
 type UseFetchResult = {
   isLoading: boolean;
