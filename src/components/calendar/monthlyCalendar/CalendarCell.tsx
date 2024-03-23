@@ -1,10 +1,10 @@
-import { Dispatch, DragEvent, SetStateAction } from 'react';
-import { Moment } from 'moment';
+import { Dispatch, DragEvent, SetStateAction, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import HolidayLabel from './HolidayLabel';
 import TaskLabel from './TaskLabel';
 import { IBusyDate, ICalendarDate, ITask } from 'types/types';
 import { reassignTask } from '../inlineManager/utils/inline-manager-utils';
+import { SelectedDateContext } from 'contexts/selectedDateContext';
 
 interface IStyledCellProps {
   isRelevant: boolean;
@@ -66,7 +66,6 @@ const Cards = styled.div`
 type TCalendarCellProps = {
   date: ICalendarDate;
   onCellClick: (date: ICalendarDate) => void;
-  selectedDate: Moment;
   hoveredDate: ICalendarDate | null;
   setHoveredDate: (value: ICalendarDate | null) => void;
   draggedTask: ITask | null;
@@ -76,13 +75,14 @@ type TCalendarCellProps = {
 const CalendarCell = ({
   date,
   onCellClick,
-  selectedDate,
   hoveredDate,
   setHoveredDate,
   draggedTask,
   setBusyDates,
 }: TCalendarCellProps) => {
-  const dragEndHandler = (e: DragEvent<HTMLDivElement>) => {
+  const [selectedDate] = useContext(SelectedDateContext);
+
+  const dragEndHandler = () => {
     setHoveredDate(null);
   };
 
@@ -103,10 +103,10 @@ const CalendarCell = ({
   return (
     <StyledDateCell
       onClick={() => onCellClick(date)}
-      onDragLeave={(e: DragEvent<HTMLDivElement>) => dragEndHandler(e)}
-      onDragEnd={(e: DragEvent<HTMLDivElement>) => dragEndHandler(e)}
+      onDragLeave={() => dragEndHandler()}
+      onDragEnd={() => dragEndHandler()}
       onDragOver={(e: DragEvent<HTMLDivElement>) => dragOverHandler(e, date)}
-      onDragExit={(e: DragEvent<HTMLDivElement>) => dragEndHandler(e)}
+      onDragExit={() => dragEndHandler()}
       onDrop={(e: DragEvent<HTMLDivElement>) => dropHandler(e, date)}
       {...dateCellProps}
     >

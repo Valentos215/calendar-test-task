@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
-import { Moment } from 'moment';
+import { Dispatch, SetStateAction, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import confirmLogo from 'assets/ok.svg';
 import cancelLogo from 'assets/cancel.svg';
 import ButtonIcon from './ButtonIcon';
-import { EFormError } from 'constants/constants';
+import { EFormError, taskTextLength } from 'constants/constants';
 import { getIsTaskExist } from './utils/inline-manager-utils';
 import ChangeColor from './ChangeColor';
+import { SelectedDateContext } from 'contexts/selectedDateContext';
 
 const StyledTaskForm = styled.div`
   display: flex;
@@ -37,7 +37,6 @@ type TTaskFormProps = {
   setError: (value: string) => void;
   onCancelClick: () => void;
   onConfirmClick: () => void;
-  selectedDate: Moment;
   busyDates: IBusyDate[];
   isTaskChanging: boolean;
 };
@@ -49,16 +48,19 @@ const TaskForm = ({
   setError,
   onCancelClick,
   onConfirmClick,
-  selectedDate,
   busyDates,
   isTaskChanging,
 }: TTaskFormProps) => {
+  const [selectedDate] = useContext(SelectedDateContext);
+
   useEffect(() => {
+    // validation of task text
+
     setError('');
-    if (!newTask?.title.length || newTask?.title.length < 5) {
+    if (!newTask?.title.length || newTask?.title.length < taskTextLength.min) {
       setError(EFormError.SHORT);
     }
-    if (newTask?.title.length > 60) {
+    if (newTask?.title.length > taskTextLength.max) {
       setError(EFormError.LONG);
     }
     if (getIsTaskExist(newTask, selectedDate, busyDates) && !isTaskChanging) {
@@ -67,7 +69,7 @@ const TaskForm = ({
   }, [newTask, setError, selectedDate, busyDates, isTaskChanging]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTask({ ...newTask, title: e.target.value.slice(0, 61) });
+    setNewTask({ ...newTask, title: e.target.value.slice(0, taskTextLength.max + 1) });
   };
 
   return (

@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Moment } from 'moment';
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import TaskCard from './TaskCard';
@@ -10,6 +9,7 @@ import { addTask } from './utils/inline-manager-utils';
 import plusLogo from 'assets/plus.svg';
 import ButtonIcon from './ButtonIcon';
 import { findTasks } from '../utils/calendar-utils';
+import { SelectedDateContext } from 'contexts/selectedDateContext';
 
 const StyledInlineManager = styled.div`
   display: flex;
@@ -31,7 +31,6 @@ const CreateButtonField = styled.div`
 `;
 
 type TInlineManagerProps = {
-  selectedDate: Moment;
   holiday: string | null;
   busyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
@@ -40,13 +39,13 @@ type TInlineManagerProps = {
 };
 
 const InlineManager = ({
-  selectedDate,
   holiday,
   setBusyDates,
   busyDates,
   draggedTask,
   setDraggedTask,
 }: TInlineManagerProps) => {
+  const [selectedDate] = useContext(SelectedDateContext);
   const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
   const [isSomeChangingNow, setIsSomeChangingNow] = useState<boolean>(false);
   const [isCreateInProcess, setIsCreateInProcess] = useState<boolean>(false);
@@ -87,7 +86,6 @@ const InlineManager = ({
         tasks.map((task) => (
           <TaskCard
             task={task}
-            selectedDate={selectedDate}
             setBusyDates={setBusyDates}
             isSomeChangingNow={isSomeChangingNow}
             setIsSomeChangingNow={setIsSomeChangingNow}
@@ -107,7 +105,6 @@ const InlineManager = ({
           setError={setError}
           onCancelClick={onCancelClick}
           onConfirmClick={onConfirmClick}
-          selectedDate={selectedDate}
           busyDates={busyDates}
           isTaskChanging={false}
         />

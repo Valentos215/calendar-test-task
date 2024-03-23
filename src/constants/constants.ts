@@ -69,8 +69,13 @@ export const holidays: IHoliday[] = [
 
 export const weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+type TTaskTextLength = { min: number; max: number };
+export const taskTextLength: TTaskTextLength = { min: 5, max: 60 };
+
+export const searchTextLength: number = 20;
+
 export enum EFormError {
-  SHORT = 'The task must be longer than 5 characters',
-  EXIST = 'Such a task has already been created',
+  SHORT = `The task must be longer than 5 characters`,
   LONG = 'The task should not be longer than 60 characters.',
+  EXIST = 'Such a task has already been created',
 }

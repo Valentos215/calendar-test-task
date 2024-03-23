@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Moment } from 'moment';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import styled from 'styled-components';
 import CalendarCell from './CalendarCell';
 import { createMonthlyCalendar, setDate } from 'components/calendar/utils/calendar-utils';
 import { holidays, weekDays } from 'constants/constants';
 import { IBusyDate, ICalendarDate, ITask } from 'types/types';
+import { SelectedDateContext } from 'contexts/selectedDateContext';
 
 const StyledCalendar = styled.div`
   display: grid;
@@ -20,21 +20,18 @@ const WeekDayCell = styled.div`
 `;
 
 type TMonthlyCalendarProps = {
-  selectedDate: Moment;
-  setSelectedDate: Dispatch<SetStateAction<Moment>>;
-  busyDates: IBusyDate[];
-  draggedTask: ITask | null;
+  filteredBusyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
+  draggedTask: ITask | null;
 };
 
 const MonthlyCalendar = ({
-  selectedDate,
-  setSelectedDate,
-  busyDates,
-  draggedTask,
+  filteredBusyDates,
   setBusyDates,
+  draggedTask,
 }: TMonthlyCalendarProps) => {
-  const calendarState = createMonthlyCalendar(selectedDate, busyDates, holidays);
+  const [selectedDate, setSelectedDate] = useContext(SelectedDateContext);
+  const calendarState = createMonthlyCalendar(selectedDate, filteredBusyDates, holidays);
   const [hoveredDate, setHoveredDate] = useState<ICalendarDate | null>(null);
 
   const onCellClick = (date: ICalendarDate) => {
@@ -49,7 +46,6 @@ const MonthlyCalendar = ({
       {calendarState.map((d: ICalendarDate) => (
         <CalendarCell
           date={d}
-          selectedDate={selectedDate}
           onCellClick={onCellClick}
           hoveredDate={hoveredDate}
           setHoveredDate={setHoveredDate}

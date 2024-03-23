@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
-import { Moment } from 'moment';
+import { useContext } from 'react';
 import styled from 'styled-components';
 import HeaderTitle from './HeaderTitle';
 import HeaderButton from './HeaderButton';
 import Filter from './Filter';
+import { SelectedDateContext } from 'contexts/selectedDateContext';
 
 const StyledHeader = styled.header`
   min-height: 4rem;
@@ -34,13 +34,12 @@ const LeftColumn = styled.div`
 `;
 
 type THeaderProps = {
-  selectedDate: Moment;
-  setSelectedDate: Dispatch<SetStateAction<Moment>>;
   filter: string;
   setFilter: (value: string) => void;
 };
 
-const Header = ({ selectedDate, setSelectedDate, filter, setFilter }: THeaderProps) => {
+const Header = ({ filter, setFilter }: THeaderProps) => {
+  const [selectedDate, setSelectedDate] = useContext(SelectedDateContext);
   const titleText = `${selectedDate.format('MMMM')} ${selectedDate.year()}`;
 
   const goToPrevMonth = () => {

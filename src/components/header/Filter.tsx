@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import searchLogo from 'assets/search.svg';
+import { searchTextLength } from 'constants/constants';
 
 const StyledFilter = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ type TFilterProps = {
 
 const Filter = ({ filter, setFilter }: TFilterProps) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value.slice(0, 20));
+    setFilter(e.target.value.slice(0, searchTextLength));
   };
   return (
     <StyledFilter>

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Header from 'components/header/Header';
 import styled from 'styled-components';
-import moment from 'moment';
 import Calendar from 'components/calendar/Calendar';
+import { SelectedDateProvider } from 'contexts/selectedDateContext';
 
 const AppWrapper = styled.div`
   width: 100%;
@@ -24,19 +24,15 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [selectedDate, setSelectedDate] = useState(moment);
   const [filter, setFilter] = useState('');
 
   return (
     <AppWrapper>
       <Container>
-        <Header
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          filter={filter}
-          setFilter={setFilter}
-        />
-        <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} filter={filter} />
+        <SelectedDateProvider>
+          <Header filter={filter} setFilter={setFilter} />
+          <Calendar filter={filter} />
+        </SelectedDateProvider>
       </Container>
     </AppWrapper>
   );

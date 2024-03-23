@@ -1,5 +1,4 @@
-import { Dispatch, DragEvent, SetStateAction, useState } from 'react';
-import { Moment } from 'moment';
+import { Dispatch, DragEvent, SetStateAction, useContext, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import { editTask, reorderTask, removeTask } from './utils/inline-manager-utils';
@@ -8,6 +7,7 @@ import ButtonIcon from './ButtonIcon';
 import { ETaskColor } from 'constants/constants';
 import editLogo from 'assets/edit.svg';
 import basketLogo from 'assets/basket.svg';
+import { SelectedDateContext } from 'contexts/selectedDateContext';
 
 const StyledTaskCard = styled.div<{ color: string; isHovered: boolean }>`
   background: ${(props) => props.color};
@@ -39,7 +39,6 @@ const StyledTitle = styled.div`
 
 type TTaskCardProps = {
   task: ITask;
-  selectedDate: Moment;
   busyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
   isSomeChangingNow: boolean;
@@ -52,7 +51,6 @@ type TTaskCardProps = {
 
 const TaskCard = ({
   task,
-  selectedDate,
   busyDates,
   setBusyDates,
   isSomeChangingNow,
@@ -62,6 +60,7 @@ const TaskCard = ({
   hoveredTask,
   setHoveredTask,
 }: TTaskCardProps) => {
+  const [selectedDate] = useContext(SelectedDateContext);
   const [isChangingInProcess, setIsChangingInProcess] = useState<boolean>(false);
   const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
   const [error, setError] = useState('');
@@ -137,7 +136,6 @@ const TaskCard = ({
           setError={setError}
           onCancelClick={onCancelClick}
           onConfirmClick={onConfirmClick}
-          selectedDate={selectedDate}
           busyDates={busyDates}
           isTaskChanging={true}
         />
