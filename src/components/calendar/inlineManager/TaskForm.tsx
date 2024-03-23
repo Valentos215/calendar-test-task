@@ -37,7 +37,7 @@ type TTaskFormProps = {
   setError: (value: string) => void;
   onCancelClick: () => void;
   onConfirmClick: () => void;
-  busyDates: IBusyDate[];
+  filteredBusyDates: IBusyDate[];
   isTaskChanging: boolean;
 };
 
@@ -48,7 +48,7 @@ const TaskForm = ({
   setError,
   onCancelClick,
   onConfirmClick,
-  busyDates,
+  filteredBusyDates,
   isTaskChanging,
 }: TTaskFormProps) => {
   const [selectedDate] = useContext(SelectedDateContext);
@@ -63,10 +63,10 @@ const TaskForm = ({
     if (newTask?.title.length > taskTextLength.max) {
       setError(EFormError.LONG);
     }
-    if (getIsTaskExist(newTask, selectedDate, busyDates) && !isTaskChanging) {
+    if (getIsTaskExist(newTask, selectedDate, filteredBusyDates) && !isTaskChanging) {
       setError(EFormError.EXIST);
     }
-  }, [newTask, setError, selectedDate, busyDates, isTaskChanging]);
+  }, [newTask, setError, selectedDate, filteredBusyDates, isTaskChanging]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTask({ ...newTask, title: e.target.value.slice(0, taskTextLength.max + 1) });

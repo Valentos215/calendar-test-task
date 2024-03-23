@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, memo, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IBusyDate, ITask } from 'types/types';
 import TaskCard from './TaskCard';
@@ -32,91 +32,93 @@ const CreateButtonField = styled.div`
 
 type TInlineManagerProps = {
   holiday: string | null;
-  busyDates: IBusyDate[];
+  filteredBusyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
   draggedTask: ITask | null;
   setDraggedTask: (value: ITask) => void;
 };
 
-const InlineManager = ({
-  holiday,
-  setBusyDates,
-  busyDates,
-  draggedTask,
-  setDraggedTask,
-}: TInlineManagerProps) => {
-  const [selectedDate] = useContext(SelectedDateContext);
-  const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
-  const [isSomeChangingNow, setIsSomeChangingNow] = useState<boolean>(false);
-  const [isCreateInProcess, setIsCreateInProcess] = useState<boolean>(false);
-  const [error, setError] = useState('');
-  const [hoveredTask, setHoveredTask] = useState<ITask | null>(null);
+const InlineManager = memo(
+  ({
+    holiday,
+    setBusyDates,
+    filteredBusyDates,
+    draggedTask,
+    setDraggedTask,
+  }: TInlineManagerProps) => {
+    const [selectedDate] = useContext(SelectedDateContext);
+    const [newTask, setNewTask] = useState<ITask>({ title: '', color: ETaskColor.AZURE });
+    const [isSomeChangingNow, setIsSomeChangingNow] = useState<boolean>(false);
+    const [isCreateInProcess, setIsCreateInProcess] = useState<boolean>(false);
+    const [error, setError] = useState('');
+    const [hoveredTask, setHoveredTask] = useState<ITask | null>(null);
 
-  const title = selectedDate.format('dddd, D MMMM');
-  const tasks = findTasks(busyDates, selectedDate);
+    const title = selectedDate.format('dddd, D MMMM');
+    const tasks = findTasks(filteredBusyDates, selectedDate);
 
-  useEffect(() => {
-    if (isSomeChangingNow) {
-      setIsCreateInProcess(false);
-    }
-  }, [isSomeChangingNow]);
+    useEffect(() => {
+      if (isSomeChangingNow) {
+        setIsCreateInProcess(false);
+      }
+    }, [isSomeChangingNow]);
 
-  const onCreateClick = () => {
-    setIsCreateInProcess(true);
-  };
+    const onCreateClick = () => {
+      setIsCreateInProcess(true);
+    };
 
-  const onCancelClick = () => {
-    setNewTask({ title: '', color: ETaskColor.AZURE });
-    setIsCreateInProcess(false);
-  };
-
-  const onConfirmClick = () => {
-    if (!error) {
-      addTask(newTask, selectedDate, setBusyDates);
-      setIsCreateInProcess(false);
+    const onCancelClick = () => {
       setNewTask({ title: '', color: ETaskColor.AZURE });
-    }
-  };
+      setIsCreateInProcess(false);
+    };
 
-  return (
-    <StyledInlineManager>
-      <StyledTitle>{title}</StyledTitle>
-      {!!holiday && <HolidayCard holiday={holiday} />}
-      {!!tasks?.length &&
-        tasks.map((task) => (
-          <TaskCard
-            task={task}
-            setBusyDates={setBusyDates}
-            isSomeChangingNow={isSomeChangingNow}
-            setIsSomeChangingNow={setIsSomeChangingNow}
-            key={task.title}
-            busyDates={busyDates}
-            draggedTask={draggedTask}
-            setDraggedTask={setDraggedTask}
-            hoveredTask={hoveredTask}
-            setHoveredTask={setHoveredTask}
+    const onConfirmClick = () => {
+      if (!error) {
+        addTask(newTask, selectedDate, setBusyDates);
+        setIsCreateInProcess(false);
+        setNewTask({ title: '', color: ETaskColor.AZURE });
+      }
+    };
+
+    return (
+      <StyledInlineManager>
+        <StyledTitle>{title}</StyledTitle>
+        {!!holiday && <HolidayCard holiday={holiday} />}
+        {!!tasks?.length &&
+          tasks.map((task) => (
+            <TaskCard
+              task={task}
+              setBusyDates={setBusyDates}
+              isSomeChangingNow={isSomeChangingNow}
+              setIsSomeChangingNow={setIsSomeChangingNow}
+              key={task.title}
+              filteredBusyDates={filteredBusyDates}
+              draggedTask={draggedTask}
+              setDraggedTask={setDraggedTask}
+              hoveredTask={hoveredTask}
+              setHoveredTask={setHoveredTask}
+            />
+          ))}
+        {isCreateInProcess && (
+          <TaskForm
+            newTask={newTask}
+            setNewTask={setNewTask}
+            error={error}
+            setError={setError}
+            onCancelClick={onCancelClick}
+            onConfirmClick={onConfirmClick}
+            filteredBusyDates={filteredBusyDates}
+            isTaskChanging={false}
           />
-        ))}
-      {isCreateInProcess && (
-        <TaskForm
-          newTask={newTask}
-          setNewTask={setNewTask}
-          error={error}
-          setError={setError}
-          onCancelClick={onCancelClick}
-          onConfirmClick={onConfirmClick}
-          busyDates={busyDates}
-          isTaskChanging={false}
-        />
-      )}
+        )}
 
-      {!isCreateInProcess && !isSomeChangingNow && (
-        <CreateButtonField>
-          <ButtonIcon onButtonClick={onCreateClick} iconSrc={plusLogo} />
-        </CreateButtonField>
-      )}
-    </StyledInlineManager>
-  );
-};
+        {!isCreateInProcess && !isSomeChangingNow && (
+          <CreateButtonField>
+            <ButtonIcon onButtonClick={onCreateClick} iconSrc={plusLogo} />
+          </CreateButtonField>
+        )}
+      </StyledInlineManager>
+    );
+  },
+);
 
 export default InlineManager;

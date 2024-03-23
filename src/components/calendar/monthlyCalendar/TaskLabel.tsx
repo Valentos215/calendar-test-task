@@ -1,3 +1,4 @@
+import { cellLabelTextLength } from 'constants/constants';
 import styled from 'styled-components';
 import { ITask } from 'types/types';
 import { sliceText } from 'utils/utils';
@@ -21,7 +22,11 @@ interface ILabelProps {
 
 const TaskLabel = ({ tasks }: ILabelProps) => {
   const color: string = tasks[0].color;
-  return <StyledTaskLabel color={color}>{sliceText(tasks[0].title, 20)}</StyledTaskLabel>;
+  return (
+    <StyledTaskLabel color={color}>
+      {sliceText(tasks[0].title, cellLabelTextLength)}
+    </StyledTaskLabel>
+  );
 };
 
 export default TaskLabel;

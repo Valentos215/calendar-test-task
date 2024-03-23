@@ -39,7 +39,7 @@ const StyledTitle = styled.div`
 
 type TTaskCardProps = {
   task: ITask;
-  busyDates: IBusyDate[];
+  filteredBusyDates: IBusyDate[];
   setBusyDates: Dispatch<SetStateAction<IBusyDate[]>>;
   isSomeChangingNow: boolean;
   setIsSomeChangingNow: (value: boolean) => void;
@@ -51,7 +51,7 @@ type TTaskCardProps = {
 
 const TaskCard = ({
   task,
-  busyDates,
+  filteredBusyDates,
   setBusyDates,
   isSomeChangingNow,
   setIsSomeChangingNow,
@@ -136,7 +136,7 @@ const TaskCard = ({
           setError={setError}
           onCancelClick={onCancelClick}
           onConfirmClick={onConfirmClick}
-          busyDates={busyDates}
+          filteredBusyDates={filteredBusyDates}
           isTaskChanging={true}
         />
       )}

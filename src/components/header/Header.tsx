@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import styled from 'styled-components';
 import HeaderTitle from './HeaderTitle';
 import HeaderButton from './HeaderButton';
@@ -36,9 +36,10 @@ const LeftColumn = styled.div`
 type THeaderProps = {
   filter: string;
   setFilter: (value: string) => void;
+  isLoading: boolean;
 };
 
-const Header = ({ filter, setFilter }: THeaderProps) => {
+const Header = memo(({ filter, setFilter, isLoading }: THeaderProps) => {
   const [selectedDate, setSelectedDate] = useContext(SelectedDateContext);
   const titleText = `${selectedDate.format('MMMM')} ${selectedDate.year()}`;
 
@@ -57,11 +58,11 @@ const Header = ({ filter, setFilter }: THeaderProps) => {
         <Filter filter={filter} setFilter={setFilter} />
       </LeftColumn>
       <RightColumn>
-        <HeaderButton onButtonClick={goToPrevMonth} title="Prev month" />
-        <HeaderButton onButtonClick={goToNextMonth} title="Next month" />
+        <HeaderButton disabled={isLoading} title="Prev month" onButtonClick={goToPrevMonth} />
+        <HeaderButton disabled={isLoading} title="Next month" onButtonClick={goToNextMonth} />
       </RightColumn>
     </StyledHeader>
   );
-};
+});
 
 export default Header;

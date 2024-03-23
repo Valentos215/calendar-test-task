@@ -1,3 +1,4 @@
+import { cellLabelTextLength } from 'constants/constants';
 import styled from 'styled-components';
 import { sliceText } from 'utils/utils';
 
@@ -15,7 +16,7 @@ interface IHolidayLabelProps {
 }
 
 const HolidayLabel = ({ holiday }: IHolidayLabelProps) => {
-  return <StyledHolidayLabel>{sliceText(holiday, 20)}</StyledHolidayLabel>;
+  return <StyledHolidayLabel>{sliceText(holiday, cellLabelTextLength)}</StyledHolidayLabel>;
 };
 
 export default HolidayLabel;

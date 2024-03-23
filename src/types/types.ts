@@ -31,3 +31,13 @@ export interface ICalendarDate {
   isRelevant: boolean;
   isToday: boolean;
 }
+
+export type IHolidaysResponse = {
+  date: string;
+  name: string;
+}[];
+
+export interface IResponse extends IHolidaysResponse {
+  date: string;
+  name: string;
+}

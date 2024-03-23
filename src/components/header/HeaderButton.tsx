@@ -21,10 +21,15 @@ const StyledButton = styled.button`
 type THeaderButtonProps = {
   title: string;
   onButtonClick: () => void;
+  disabled: boolean;
 };
 
-const HeaderButton = ({ title, onButtonClick }: THeaderButtonProps) => {
-  return <StyledButton onClick={onButtonClick}>{title}</StyledButton>;
+const HeaderButton = ({ title, onButtonClick, disabled }: THeaderButtonProps) => {
+  return (
+    <StyledButton disabled={disabled} onClick={onButtonClick}>
+      {title}
+    </StyledButton>
+  );
 };
 
 export default HeaderButton;

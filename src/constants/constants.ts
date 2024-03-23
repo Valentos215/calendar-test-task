@@ -1,5 +1,3 @@
-import { IHoliday } from 'types/types';
-
 export enum ETaskColor {
   GREEN = 'rgb(96, 190, 80)',
   BLUE = 'rgb(3, 120, 190)',
@@ -9,64 +7,6 @@ export enum ETaskColor {
   PURPLE = 'rgb(195, 118, 224)',
 }
 
-export const holidays: IHoliday[] = [
-  {
-    date: 8,
-    month: 2,
-    title: "International Women's Day",
-  },
-  {
-    date: 14,
-    month: 1,
-    title: "Valentine's Day",
-  },
-  {
-    date: 25,
-    month: 11,
-    title: 'Christmas',
-  },
-  {
-    date: 31,
-    month: 11,
-    title: 'New Year’s Day',
-  },
-  {
-    date: 1,
-    month: 0,
-    title: 'New Year’s Day',
-  },
-  {
-    date: 8,
-    month: 4,
-    title: 'World Red Cross Day',
-  },
-  {
-    date: 21,
-    month: 11,
-    title: 'Winter Solstice',
-  },
-  {
-    date: 13,
-    month: 11,
-    title: 'St. Lucia Day',
-  },
-  {
-    date: 31,
-    month: 9,
-    title: 'Halloween',
-  },
-  {
-    date: 17,
-    month: 2,
-    title: 'St. Patrick’s Day',
-  },
-  {
-    date: 1,
-    month: 4,
-    title: 'Labour Day',
-  },
-];
-
 export const weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 type TTaskTextLength = { min: number; max: number };
@@ -74,8 +14,12 @@ export const taskTextLength: TTaskTextLength = { min: 5, max: 60 };
 
 export const searchTextLength: number = 20;
 
+export const cellLabelTextLength: number = 20;
+
 export enum EFormError {
   SHORT = `The task must be longer than 5 characters`,
   LONG = 'The task should not be longer than 60 characters.',
   EXIST = 'Such a task has already been created',
 }
+
+export const countryCode = 'UA';
