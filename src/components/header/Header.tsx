@@ -23,10 +23,10 @@ const RightColumn = styled.div`
 `;
 
 const LeftColumn = styled.div`
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   @media (max-width: 769px) {
     flex-direction: column;
