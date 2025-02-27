@@ -6,7 +6,7 @@ import arrowLogo from 'assets/arrow.svg';
 import { changeColor } from './utils/inline-manager-utils';
 
 const StyledChangeColor = styled.div<{ color: string }>`
-  background: ${(props) => props.color || ETaskColor.AZURE};
+  background: ${(props) => props.color || ETaskColor.BLUE};
   height: 100%;
   width: 4rem;
   font-size: 0.8rem;
